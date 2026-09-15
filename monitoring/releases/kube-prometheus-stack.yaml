@@ -68,11 +68,6 @@ spec:
               datasourceUid: loki
             serviceMap:
               datasourceUid: prometheus
-        - name: Prometheus
-          type: prometheus
-          access: proxy
-          url: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
-          isDefault: true
     prometheus:
       prometheusSpec:
         serviceMonitorSelectorNilUsesHelmValues: false
