@@ -4,6 +4,9 @@ resources:
   - namespaces/monitoring.yaml
   - sources/grafana-helmrepository.yaml
   - sources/prometheus-community-helmrepository.yaml
+  - sources/open-telemetry-helmrepository.yaml
   - releases/loki.yaml
+  - releases/fluent-bit.yaml
   - releases/tempo.yaml
+  - releases/opentelemetry-collector.yaml
   - releases/kube-prometheus-stack.yaml
