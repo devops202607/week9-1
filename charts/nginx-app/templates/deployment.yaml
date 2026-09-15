@@ -32,7 +32,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/bin/sh", "-c"]
           args:
-            - cp /config/* /app/ && python /app/app.py
+            - mkdir -p /app && cp /config/* /app/ && pip install --no-cache-dir -r /app/requirements.txt && python /app/app.py
           env:
             - name: APP_VERSION
               value: {{ .Chart.AppVersion | quote }}
