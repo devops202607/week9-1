@@ -2,34 +2,34 @@
 
 ## Results
 
-### Grafana login page
+### k9s namespaces
 
 ![grafana-login](results/2026-09-15_23-25.png)
 
-### Grafana home dashboard
+### k9s flux pods
 
 ![grafana-home](results/2026-09-15_23-27.png)
 
-### Grafana data sources
+### k9s monitoring pods
 
 ![grafana-datasources](results/2026-09-15_23-28.png)
 
-### Application response with trace ID
+### Grafana Kubernetes Resources by namespaces
 
 ![app-trace-id](results/2026-09-16_01-04.png)
 
-### Kubernetes node metrics in Grafana
+### Grafana Application Resources
 
 ![node-metrics](results/2026-09-16_01-05.png)
 
-### Application metrics in Grafana
+### Grafana Application metrics
 
 ![app-metrics](results/2026-09-16_01-07.png)
 
-### Loki logs with trace ID
+### Loki Application logs
 
 ![loki-trace-id](results/2026-09-16_01-11.png)
 
-### Tempo trace view in Grafana
+### Tempo Application Traces
 
 ![tempo-trace](results/2026-09-16_01-15.png)
