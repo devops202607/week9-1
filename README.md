@@ -2,34 +2,34 @@
 
 ## Results
 
-### 2026-09-15 23:25
+### Grafana login page
 
-![2026-09-15_23-25](results/2026-09-15_23-25.png)
+![grafana-login](results/2026-09-15_23-25.png)
 
-### 2026-09-15 23:27
+### Grafana home dashboard
 
-![2026-09-15_23-27](results/2026-09-15_23-27.png)
+![grafana-home](results/2026-09-15_23-27.png)
 
-### 2026-09-15 23:28
+### Grafana data sources
 
-![2026-09-15_23-28](results/2026-09-15_23-28.png)
+![grafana-datasources](results/2026-09-15_23-28.png)
 
-### 2026-09-16 01:04
+### Application response with trace ID
 
-![2026-09-16_01-04](results/2026-09-16_01-04.png)
+![app-trace-id](results/2026-09-16_01-04.png)
 
-### 2026-09-16 01:05
+### Kubernetes node metrics in Grafana
 
-![2026-09-16_01-05](results/2026-09-16_01-05.png)
+![node-metrics](results/2026-09-16_01-05.png)
 
-### 2026-09-16 01:07
+### Application metrics in Grafana
 
-![2026-09-16_01-07](results/2026-09-16_01-07.png)
+![app-metrics](results/2026-09-16_01-07.png)
 
-### 2026-09-16 01:11
+### Loki logs with trace ID
 
-![2026-09-16_01-11](results/2026-09-16_01-11.png)
+![loki-trace-id](results/2026-09-16_01-11.png)
 
-### 2026-09-16 01:15
+### Tempo trace view in Grafana
 
-![2026-09-16_01-15](results/2026-09-16_01-15.png)
+![tempo-trace](results/2026-09-16_01-15.png)
