@@ -1,0 +1,10 @@
+project_id   = "devops202607"
+region       = "us-central1"
+cluster_name = "week8-2"
+node_count   = 3
+machine_type = "e2-medium"
+disk_size_gb = 20
+
+github_owner = "devops202607"
+github_repo  = "week8-2"
+# github_token = set via TF_VAR_github_token env var

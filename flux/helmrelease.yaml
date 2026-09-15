@@ -1,0 +1,25 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nginx-app
+  namespace: default
+spec:
+  dependsOn:
+    - name: monitoring
+      namespace: flux-system
+  interval: 1m0s
+  chart:
+    spec:
+      chart: ./charts/nginx-app
+      reconcileStrategy: Revision
+      sourceRef:
+        kind: GitRepository
+        name: week9-1
+        namespace: flux-system
+      interval: 1m0s
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3

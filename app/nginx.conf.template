@@ -1,0 +1,14 @@
+server {
+    listen 80;
+    server_name _;
+
+    default_type text/plain;
+
+    location / {
+        return 200 "Version:   ${APP_VERSION}\nSecret:    ${APP_SECRET}\nContainer: $hostname\nIP:        $server_addr\n";
+    }
+
+    location /healthz {
+        return 200 "ok\n";
+    }
+}

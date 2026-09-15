@@ -1,0 +1,43 @@
+version: "3"
+
+vars:
+  CHART_FILE: charts/nginx-app/Chart.yaml
+
+tasks:
+  bump:
+    desc: "Bump appVersion, commit and tag. Usage: task bump LEVEL=patch|minor|major"
+    vars:
+      LEVEL: '{{.LEVEL | default "patch"}}'
+    cmds:
+      - cmd: |
+          set -euo pipefail
+          BRANCH="$(git symbolic-ref --short HEAD)"
+          LATEST="$(git tag --list 'v*' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1 || true)"
+          if [ -z "$LATEST" ]; then
+            LATEST="v$(grep '^appVersion:' {{.CHART_FILE}} | sed -E 's/.*v?([0-9]+\.[0-9]+\.[0-9]+).*/\1/')"
+          fi
+          echo "Latest version: $LATEST"
+          V="${LATEST#v}"
+          MAJOR="$(echo "$V" | cut -d. -f1)"
+          MINOR="$(echo "$V" | cut -d. -f2)"
+          PATCH="$(echo "$V" | cut -d. -f3)"
+          case "{{.LEVEL}}" in
+            major) MAJOR=$((MAJOR+1)); MINOR=0; PATCH=0 ;;
+            minor) MINOR=$((MINOR+1)); PATCH=0 ;;
+            patch) PATCH=$((PATCH+1)) ;;
+            *) echo "Unknown LEVEL: {{.LEVEL}} (use patch|minor|major)"; exit 1 ;;
+          esac
+          NEW="v${MAJOR}.${MINOR}.${PATCH}"
+          echo "New version: $NEW"
+          sed -i "s/^appVersion:.*$/appVersion: \"$NEW\"/" {{.CHART_FILE}}
+          git add {{.CHART_FILE}}
+          git commit -m "chore: release $NEW"
+          git tag "$NEW"
+          echo "Tag $NEW created locally. To release, run:"
+          echo "  git push --follow-tags origin $BRANCH && git push origin $NEW"
+        silent: true
+
+  current:
+    desc: "Show current appVersion from Chart.yaml"
+    cmds:
+      - grep '^appVersion:' {{.CHART_FILE}}

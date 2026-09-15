@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "nginx-app.fullname" . }}
+  labels:
+    {{- include "nginx-app.labels" . | nindent 4 }}
+data:
+  app.py: |
+    import json
+    import logging
+    import os
+    from flask import Flask, request
+    from opentelemetry import trace
+    from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
+    from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+    from opentelemetry.instrumentation.flask import FlaskInstrumentor
+    from opentelemetry.metrics import get_meter_provider
+    from opentelemetry.sdk.metrics import MeterProvider
+    from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+    from opentelemetry.sdk.resources import Resource
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import BatchSpanProcessor
+    from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
+    from prometheus_client import Counter, generate_latest
+
+    resource = Resource.create({"service.name": os.getenv("OTEL_SERVICE_NAME", "otel-demo-app")})
+
+    tracer_provider = TracerProvider(resource=resource)
+    tracer_provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter(endpoint=os.getenv("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"))))
+    trace.set_tracer_provider(tracer_provider)
+
+    metric_reader = PeriodicExportingMetricReader(OTLPMetricExporter(endpoint=os.getenv("OTEL_EXPORTER_OTLP_METRICS_ENDPOINT")))
+    meter_provider = MeterProvider(resource=resource, metric_readers=[metric_reader])
+
+    app = Flask(__name__)
+    FlaskInstrumentor().instrument_app(app)
+    REQUESTS = Counter("demo_requests_total", "Total demo requests", ["path"])
+    tracer = trace.get_tracer(__name__)
+
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter('%(message)s'))
+    app.logger.handlers = [handler]
+    app.logger.setLevel(logging.INFO)
+
+    @app.get("/")
+    def index():
+        REQUESTS.labels(path="/").inc()
+        span = trace.get_current_span()
+        trace_id = format(span.get_span_context().trace_id, '032x')
+        payload = {
+            "message": "hello from week9-1",
+            "version": os.getenv("APP_VERSION", "dev"),
+            "secret": os.getenv("APP_SECRET", "unset"),
+            "trace_id": trace_id,
+            "pod": os.getenv("HOSTNAME", "unknown")
+        }
+        app.logger.info(json.dumps(payload))
+        return payload
+
+    @app.get("/healthz")
+    def healthz():
+        return {"status": "ok"}
+
+    @app.get("/metrics")
+    def metrics():
+        return generate_latest(), 200, {"Content-Type": "text/plain; version=0.0.4"}
+
+    if __name__ == "__main__":
+        app.run(host="0.0.0.0", port=8080)
+  requirements.txt: |
+    flask==3.0.3
+    opentelemetry-api==1.27.0
+    opentelemetry-sdk==1.27.0
+    opentelemetry-exporter-otlp-proto-http==1.27.0
+    opentelemetry-instrumentation-flask==0.48b0
+    prometheus-client==0.20.0
+  Dockerfile: |
+    FROM python:3.12-slim
+    WORKDIR /app
+    COPY requirements.txt ./
+    RUN pip install --no-cache-dir -r requirements.txt
+    COPY app.py ./
+    ENV PYTHONUNBUFFERED=1
+    EXPOSE 8080
+    CMD ["python", "app.py"]
