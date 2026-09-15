@@ -42,8 +42,6 @@ spec:
               value: {{ .Values.otel.serviceName | quote }}
             - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
               value: {{ .Values.otel.tracesEndpoint | quote }}
-            - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
-              value: {{ .Values.otel.metricsEndpoint | quote }}
           ports:
             - name: http
               containerPort: 8080

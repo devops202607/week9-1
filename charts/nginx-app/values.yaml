@@ -22,5 +22,5 @@ imagePullSecrets: []
 
 otel:
   serviceName: otel-demo-app
-  tracesEndpoint: http://opentelemetry-collector-k8s-monitoring-application-observability-collector.monitoring.svc.cluster.local:4318/v1/traces
-  metricsEndpoint: http://opentelemetry-collector-k8s-monitoring-application-observability-collector.monitoring.svc.cluster.local:4318/v1/metrics
+  tracesEndpoint: http://tempo.monitoring.svc.cluster.local:4318/v1/traces
+  metricsEndpoint: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090/api/v1/write

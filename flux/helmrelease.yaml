@@ -11,8 +11,6 @@ spec:
       namespace: monitoring
     - name: tempo
       namespace: monitoring
-    - name: opentelemetry-collector
-      namespace: monitoring
   interval: 1m0s
   chart:
     spec:
