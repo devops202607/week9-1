@@ -5,8 +5,14 @@ metadata:
   namespace: default
 spec:
   dependsOn:
-    - name: monitoring
-      namespace: flux-system
+    - name: kube-prometheus-stack
+      namespace: monitoring
+    - name: loki
+      namespace: monitoring
+    - name: tempo
+      namespace: monitoring
+    - name: opentelemetry-collector
+      namespace: monitoring
   interval: 1m0s
   chart:
     spec:

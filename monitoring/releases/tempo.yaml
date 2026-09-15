@@ -19,6 +19,9 @@ spec:
   upgrade:
     remediation:
       retries: 3
+  dependsOn:
+    - name: kube-prometheus-stack
+      namespace: monitoring
   values:
     tempo:
       reportingEnabled: false

@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - namespaces/monitoring.yaml
   - sources/grafana-helmrepository.yaml
+  - sources/prometheus-community-helmrepository.yaml
   - releases/loki.yaml
   - releases/fluent-bit.yaml
   - releases/tempo.yaml
