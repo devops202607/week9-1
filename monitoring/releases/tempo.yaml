@@ -32,5 +32,3 @@ spec:
               enabled: true
             http:
               enabled: true
-    serviceMonitor:
-      enabled: true
