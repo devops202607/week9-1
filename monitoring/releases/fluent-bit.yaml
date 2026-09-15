@@ -28,6 +28,7 @@ spec:
       servicePath: /loki/api/v1/push
     config:
       loglevel: info
+      memBufLimit: 50MB
       labels: '{job="fluent-bit",cluster="week9-1"}'
       labelMap:
         kubernetes:
